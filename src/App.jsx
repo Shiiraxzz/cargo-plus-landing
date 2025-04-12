@@ -11,7 +11,10 @@ import AuthDetails from "./pages/AuthDetails";
 import Login from "./pages/LogIn";
 import Profile from "./pages/Profile";
 import EditProfile from "./pages/EditProfile";
+import OrderPage from "./pages/OrderPage";
+import TrackOrderPage from "./pages/TrackPage";
 function App() {
+
   return (
     <Router>
       <Navbar />
@@ -27,6 +30,8 @@ function App() {
         <Route path="/auth" element={<AuthDetails />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/edit-profile" element={<EditProfile />} />
+        <Route path="/orders" element={<OrderPage />} />
+        <Route path="/track" element={<TrackOrderPage />} />
         {/* Add more routes as needed */}
       </Routes>
     </Router>

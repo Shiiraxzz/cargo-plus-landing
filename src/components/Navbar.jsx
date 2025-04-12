@@ -3,28 +3,34 @@ import { motion } from "framer-motion";
 import AuthDetails from "../pages/AuthDetails";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../firebase"; // adjust the path based on your folder
-
-const navLinks = [
-  { name: "Home", path: "/" },
-  { name: "About", path: "/about" },
-  { name: "Services", path: "/services" },
-  { name: "Contact", path: "/contact" },
-//   { name: "Pricing", path: "/pricing" },
-];
+import { auth } from "../firebase";
 
 export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setIsLoggedIn(!!user); // if user exists, set true
+      setIsLoggedIn(!!user); // true if user exists
     });
 
-    return () => unsubscribe(); // clean up
+    return () => unsubscribe();
   }, []);
 
-  const location = useLocation();
+  // Define nav links based on login state
+  const navLinks = isLoggedIn
+    ? [
+        { name: "Home", path: "/" },
+        { name: "Book", path: "/Booking" },
+        { name: "My Orders", path: "/orders" },
+        { name: "Track Order", path: "/track" },
+      ]
+    : [
+        { name: "Home", path: "/" },
+        { name: "About", path: "/about" },
+        { name: "Services", path: "/services" },
+        { name: "Contact", path: "/contact" },
+      ];
 
   return (
     <nav className="bg-white shadow-md fixed top-0 left-0 w-full z-50">
@@ -55,28 +61,7 @@ export default function Navbar() {
             </motion.li>
           ))}
 
-          {/* Show "Book" only if logged in */}
-          {isLoggedIn && (
-            <motion.li
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              className={`relative ${
-                location.pathname === "/Booking" ? "text-blue-600" : "text-gray-800"
-              } font-medium`}
-            >
-              <Link to="/Booking" className="transition-colors duration-300">
-                Book
-              </Link>
-              {location.pathname === "/Booking" && (
-                <motion.div
-                  layoutId="underline"
-                  className="absolute left-0 right-0 -bottom-1 h-[2px] bg-blue-500 rounded"
-                />
-              )}
-            </motion.li>
-          )}
-
-          {/* 🔽 AuthDetails at the end of nav */}
+          {/* AuthDetails (shows profile icon or login/signup) */}
           <li className="ml-4">
             <AuthDetails />
           </li>
